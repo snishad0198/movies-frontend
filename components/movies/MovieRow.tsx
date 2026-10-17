@@ -53,31 +53,32 @@ export function MovieRow({ title, items, viewAllHref, showRank = false }: MovieR
 
       {/* Row Scroll Container */}
       <div className="relative px-4 sm:px-6 lg:px-8">
-        {/* Left Arrow */}
+        {/* Left Arrow (Desktop Only) */}
         <button
           onClick={() => scroll("left")}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/70 hover:bg-[#e50914] text-white flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all duration-200 shadow-xl backdrop-blur-md border border-white/10 -translate-x-2 group-hover/row:translate-x-0"
+          className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/80 hover:bg-[#e50914] text-white items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all duration-200 shadow-xl backdrop-blur-md border border-white/10 -translate-x-2 group-hover/row:translate-x-0 cursor-pointer"
           aria-label="Scroll left"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
 
-        {/* Horizontal Slider */}
+        {/* Horizontal Slider with Touch Momentum & Snapping */}
         <div
           ref={rowRef}
-          className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-2"
+          className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-2 -mx-4 px-4 sm:mx-0 sm:px-0"
+          style={{ WebkitOverflowScrolling: "touch" }}
         >
           {items.map((movie, idx) => (
-            <div key={movie.id} className="w-[140px] sm:w-[175px] md:w-[195px] flex-shrink-0">
+            <div key={movie.id} className="w-[130px] sm:w-[170px] md:w-[195px] flex-shrink-0 snap-start">
               <MovieCard movie={movie} rank={showRank ? idx + 1 : undefined} />
             </div>
           ))}
         </div>
 
-        {/* Right Arrow */}
+        {/* Right Arrow (Desktop Only) */}
         <button
           onClick={() => scroll("right")}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/70 hover:bg-[#e50914] text-white flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all duration-200 shadow-xl backdrop-blur-md border border-white/10 translate-x-2 group-hover/row:translate-x-0"
+          className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/80 hover:bg-[#e50914] text-white items-center justify-center opacity-0 group-hover/row:opacity-100 transition-all duration-200 shadow-xl backdrop-blur-md border border-white/10 translate-x-2 group-hover/row:translate-x-0 cursor-pointer"
           aria-label="Scroll right"
         >
           <ChevronRight className="w-5 h-5" />

@@ -80,9 +80,9 @@ export default function WatchlistPage() {
         </div>
 
         {watchlist.length > 0 && (
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 w-full sm:w-auto">
             {/* Filter Pills */}
-            <div className="flex items-center p-1 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold">
+            <div className="flex items-center p-1 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold overflow-x-auto no-scrollbar">
               <button
                 onClick={() => setFilter("ALL")}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${

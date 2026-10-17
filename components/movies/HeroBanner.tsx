@@ -42,7 +42,7 @@ export function HeroBanner({ items }: HeroBannerProps) {
   const trailerEmbed = getYouTubeEmbed(current.trailerUrl);
 
   return (
-    <div className="relative w-full min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] h-[82vh] lg:h-[88vh] bg-black overflow-hidden select-none">
+    <div className="relative w-full min-h-[490px] sm:min-h-[620px] lg:min-h-[720px] h-[75vh] sm:h-[82vh] lg:h-[88vh] bg-black overflow-hidden select-none">
       {/* Backdrop Image with Transitions */}
       <div className="absolute inset-0">
         <LazyImage
@@ -57,22 +57,22 @@ export function HeroBanner({ items }: HeroBannerProps) {
         />
         {/* Cinema Vignette Gradients */}
         {/* Top protective gradient ensuring fixed navbar is always distinct and never collides */}
-        <div className="absolute top-0 left-0 right-0 h-44 bg-gradient-to-b from-[#08080c] via-[#08080c]/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#08080c] via-[#08080c]/70 to-transparent w-full md:w-3/4 z-10 pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-36 sm:h-44 bg-gradient-to-b from-[#08080c] via-[#08080c]/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#08080c] via-[#08080c]/80 to-transparent w-full md:w-3/4 z-10 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#08080c] via-transparent to-[#08080c]/40 z-10 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-[#08080c] to-transparent z-10 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-36 bg-gradient-to-t from-[#08080c] to-transparent z-10 pointer-events-none" />
       </div>
 
       {/* Hero Content Container with guaranteed top clearance for fixed header */}
-      <div className="relative z-20 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-20">
-        <div className="max-w-2xl space-y-3.5">
+      <div className="relative z-20 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pt-24 sm:pt-36 lg:pt-40 pb-14 sm:pb-20">
+        <div className="max-w-2xl space-y-3">
           {/* Metadata Badges */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-[#e50914] text-white shadow-sm">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <span className="px-2 sm:px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-[#e50914] text-white shadow-sm">
               {isSeries ? "Featured Series" : "Featured Movie"}
             </span>
             {rating !== null && rating !== undefined && (
-              <div className="flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-semibold bg-black/70 text-[#f5c518] border border-white/10 backdrop-blur-md">
+              <div className="flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-semibold bg-black/70 text-[#f5c518] border border-white/10 backdrop-blur-md">
                 <Star className="w-3.5 h-3.5 fill-[#f5c518]" />
                 <span>{formatRating(rating)} IMDb</span>
               </div>
@@ -97,11 +97,11 @@ export function HeroBanner({ items }: HeroBannerProps) {
             {current.overview || "Stream in 4K Ultra-HD with multiple high-speed servers and direct download links on Movies.snishad."}
           </p>
 
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center gap-2.5 pt-2">
+          {/* Action CTAs (Mobile Responsive Touch Grid) */}
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-2.5 pt-2">
             <Link
               href={watchHref}
-              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-[#e50914] hover:bg-[#f40612] text-white font-bold text-sm transition-all shadow-lg shadow-red-600/30 hover:scale-105 cursor-pointer"
+              className="col-span-2 sm:col-span-1 inline-flex items-center justify-center gap-2.5 px-6 py-2.5 sm:py-3 rounded-xl bg-[#e50914] hover:bg-[#f40612] text-white font-bold text-sm transition-all shadow-lg shadow-red-600/30 hover:scale-[1.02] cursor-pointer"
             >
               <Play className="w-4 h-4 fill-white" />
               <span>Watch Now</span>
@@ -110,7 +110,7 @@ export function HeroBanner({ items }: HeroBannerProps) {
             {trailerEmbed && (
               <button
                 onClick={() => setTrailerModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm backdrop-blur-md border border-white/15 transition-all hover:scale-105 cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm backdrop-blur-md border border-white/15 transition-all cursor-pointer"
               >
                 <span>Trailer</span>
               </button>
@@ -118,7 +118,7 @@ export function HeroBanner({ items }: HeroBannerProps) {
 
             <Link
               href={detailHref}
-              className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-black/50 hover:bg-black/70 text-slate-300 hover:text-white font-medium text-sm backdrop-blur-md border border-white/10 transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 rounded-xl bg-black/50 hover:bg-black/70 text-slate-300 hover:text-white font-medium text-xs sm:text-sm backdrop-blur-md border border-white/10 transition-all cursor-pointer"
             >
               <Info className="w-4 h-4" />
               <span>Details</span>
@@ -127,7 +127,7 @@ export function HeroBanner({ items }: HeroBannerProps) {
             <WatchlistButton
               movie={current}
               showText={true}
-              className="!px-4 !py-3 !rounded-xl !bg-black/50 hover:!bg-black/70 !text-slate-300 hover:!text-white font-medium text-sm !border !border-white/10 !backdrop-blur-md cursor-pointer"
+              className="col-span-2 sm:col-span-1 !w-full sm:!w-auto !justify-center !px-4 !py-2.5 sm:!py-3 !rounded-xl !bg-black/50 hover:!bg-black/70 !text-slate-300 hover:!text-white font-medium text-xs sm:text-sm !border !border-white/10 !backdrop-blur-md cursor-pointer"
             />
           </div>
         </div>

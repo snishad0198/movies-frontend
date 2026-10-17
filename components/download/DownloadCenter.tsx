@@ -73,7 +73,7 @@ export function DownloadCenter({
           href={downloadUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-[#e50914] to-red-600 hover:opacity-95 text-white text-sm font-black uppercase tracking-wider shadow-xl shadow-red-950/50 hover:scale-[1.02] transition-all cursor-pointer whitespace-nowrap"
+          className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-[#e50914] to-red-600 hover:opacity-95 text-white text-sm font-black uppercase tracking-wider shadow-xl shadow-red-950/50 hover:scale-[1.02] transition-all cursor-pointer whitespace-nowrap w-full sm:w-auto text-center"
         >
           <Download className="w-4 h-4" />
           <span>Download in HD / 4K</span>

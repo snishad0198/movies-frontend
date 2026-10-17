@@ -131,16 +131,16 @@ export default async function SeriesPage({ searchParams }: SeriesPageProps) {
         </div>
 
         {/* Sort selector */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400 font-medium">Sort by:</span>
-          <div className="flex items-center gap-1 bg-[#121218] p-1 rounded-xl border border-white/10">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar w-full sm:w-auto pb-1 sm:pb-0">
+          <span className="text-xs text-slate-400 font-medium whitespace-nowrap">Sort by:</span>
+          <div className="flex items-center gap-1 bg-[#121218] p-1 rounded-xl border border-white/10 shrink-0">
             {SORT_OPTIONS.map((s) => {
               const isActive = sort === s.id;
               return (
                 <Link
                   key={s.id}
                   href={buildUrl({ sort: s.id, page: 1 })}
-                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                     isActive
                       ? "bg-[#e50914] text-white shadow-sm shadow-red-600/30"
                       : "text-slate-400 hover:text-white"
@@ -219,7 +219,7 @@ export default async function SeriesPage({ searchParams }: SeriesPageProps) {
 
       {/* Grid */}
       {seriesList.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5">
           {seriesList.map((item) => (
             <MovieCard key={item.id} movie={item} />
           ))}

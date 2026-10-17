@@ -331,9 +331,9 @@ function SearchContent() {
         )}
 
         {/* 2. FORMAT PILLS & FILTER TOGGLE TOOLBAR */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+        <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 pt-2">
           {/* Format Tabs */}
-          <div className="inline-flex items-center gap-1.5 bg-[#12121c] p-1 rounded-2xl border border-white/10">
+          <div className="inline-flex items-center gap-1 sm:gap-1.5 bg-[#12121c] p-1 rounded-2xl border border-white/10 overflow-x-auto no-scrollbar max-w-full">
             {[
               { id: "ALL", label: "All Formats", icon: Compass },
               { id: "MOVIE", label: "Movies", icon: Film },

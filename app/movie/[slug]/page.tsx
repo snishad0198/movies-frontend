@@ -232,13 +232,13 @@ export default async function MovieDetailsPage({ params }: MoviePageProps) {
                   </p>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center md:justify-start gap-3">
                   {movie.trailerUrl && (
                     <a
                       href={movie.trailerUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-[#e50914] hover:bg-red-700 text-white font-bold text-sm uppercase tracking-wider shadow-xl shadow-red-600/30 transition-all cursor-pointer"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#e50914] hover:bg-red-700 text-white font-bold text-sm uppercase tracking-wider shadow-xl shadow-red-600/30 transition-all cursor-pointer w-full sm:w-auto"
                     >
                       <Play className="w-4 h-4 fill-white" />
                       <span>Watch Official Trailer</span>
@@ -247,15 +247,15 @@ export default async function MovieDetailsPage({ params }: MoviePageProps) {
                   <WatchlistButton
                     movie={movie}
                     showText={true}
-                    className="!px-6 !py-3.5 !rounded-2xl !bg-white/10 hover:!bg-white/15 !text-white !font-bold !text-sm !border !border-white/10"
+                    className="!w-full sm:!w-auto !justify-center !px-6 !py-3.5 !rounded-2xl !bg-white/10 hover:!bg-white/15 !text-white !font-bold !text-sm !border !border-white/10"
                   />
                 </div>
               </div>
             ) : (
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-4">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center md:justify-start gap-3 pt-4">
                 <Link
                   href={`/watch/${movie.slug}`}
-                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#e50914] hover:bg-red-700 text-white font-black text-sm uppercase tracking-wider shadow-xl shadow-red-600/40 hover:scale-[1.02] transition-all cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-[#e50914] hover:bg-red-700 text-white font-black text-sm uppercase tracking-wider shadow-xl shadow-red-600/40 hover:scale-[1.02] transition-all cursor-pointer w-full sm:w-auto text-center"
                 >
                   <Play className="w-4 h-4 fill-white" />
                   <span>Watch Now in HD</span>
@@ -264,7 +264,7 @@ export default async function MovieDetailsPage({ params }: MoviePageProps) {
                   href={`https://02moviedownloader.top/api/download/movie/${cleanTmdbId || movie.imdbId || movie.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm border border-white/10 transition-all cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm border border-white/10 transition-all cursor-pointer w-full sm:w-auto text-center"
                 >
                   <Download className="w-4 h-4 text-blue-400" />
                   <span>Download Full Movie</span>

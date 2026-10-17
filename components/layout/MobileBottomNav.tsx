@@ -1,0 +1,98 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Home, Film, Tv, Flame, Search, Bookmark } from "lucide-react";
+
+export function MobileBottomNav() {
+  const pathname = usePathname();
+  const [watchlistCount, setWatchlistCount] = useState<number>(0);
+
+  useEffect(() => {
+    const updateCount = () => {
+      try {
+        const stored = localStorage.getItem("sn_watchlist");
+        if (stored) {
+          const list = JSON.parse(stored);
+          setWatchlistCount(Array.isArray(list) ? list.length : 0);
+        } else {
+          setWatchlistCount(0);
+        }
+      } catch {
+        setWatchlistCount(0);
+      }
+    };
+    updateCount();
+    window.addEventListener("watchlist-updated", updateCount);
+    window.addEventListener("storage", updateCount);
+    return () => {
+      window.removeEventListener("watchlist-updated", updateCount);
+      window.removeEventListener("storage", updateCount);
+    };
+  }, []);
+
+  // Hide bottom nav on watch pages to provide true cinema immersion
+  if (pathname.startsWith("/watch/")) {
+    return null;
+  }
+
+  const navItems = [
+    { label: "Home", href: "/", icon: Home },
+    { label: "Movies", href: "/movies", icon: Film },
+    { label: "Series", href: "/series", icon: Tv },
+    { label: "Trending", href: "/trending", icon: Flame },
+    { label: "Search", href: "/search", icon: Search },
+    { label: "Watchlist", href: "/watchlist", icon: Bookmark, badge: watchlistCount },
+  ];
+
+  return (
+    <nav
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0a0a10]/95 backdrop-blur-xl border-t border-white/10 px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.8)] pb-[calc(0.4rem+env(safe-area-inset-bottom,0px))]"
+      aria-label="Mobile Navigation"
+    >
+      <div className="grid grid-cols-6 items-center">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive =
+            item.href === "/"
+              ? pathname === "/"
+              : pathname.startsWith(item.href);
+
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`relative flex flex-col items-center justify-center py-1 rounded-xl transition-all duration-200 select-none cursor-pointer ${
+                isActive
+                  ? "text-[#e50914] font-bold"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <div className="relative">
+                <Icon
+                  className={`w-5 h-5 transition-transform duration-200 ${
+                    isActive ? "scale-110 stroke-[2.4]" : "stroke-[1.8]"
+                  }`}
+                />
+                {item.badge !== undefined && item.badge > 0 && (
+                  <span className="absolute -top-1 -right-2 bg-[#e50914] text-white text-[9px] font-black min-w-[15px] h-[15px] flex items-center justify-center rounded-full px-1 shadow-sm">
+                    {item.badge > 99 ? "99+" : item.badge}
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] mt-0.5 tracking-tight truncate max-w-[54px]">
+                {item.label}
+              </span>
+              {isActive && (
+                <span className="w-1 h-1 rounded-full bg-[#e50914] mt-0.5" />
+              )}
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
+
+export default MobileBottomNav;

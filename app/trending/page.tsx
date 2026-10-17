@@ -56,10 +56,6 @@ export default async function TrendingPage({ searchParams }: TrendingPageProps) 
   const forwardHeaders: Record<string, string> = {};
   const acceptLang = headerStore.get("accept-language");
   if (acceptLang) forwardHeaders["accept-language"] = acceptLang;
-  const cfCountry = headerStore.get("cf-ipcountry");
-  if (cfCountry) forwardHeaders["cf-ipcountry"] = cfCountry;
-  const forwardedFor = headerStore.get("x-forwarded-for");
-  if (forwardedFor) forwardHeaders["x-forwarded-for"] = forwardedFor;
   const cookie = headerStore.get("cookie");
   if (cookie) forwardHeaders["cookie"] = cookie;
 

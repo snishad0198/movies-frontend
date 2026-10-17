@@ -507,7 +507,7 @@ export function TrendingLeaderboard({
           </button>
         </div>
       ) : viewMode === "grid" ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5">
           {filteredItems.map((item, index) => {
             const rank = (item as any).rank || index + 1;
             const href = item.type === "SERIES" ? `/series/${item.slug}` : `/movie/${item.slug}`;

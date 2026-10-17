@@ -840,8 +840,8 @@ export function WatchPlayerView({
           </div>
         </div>
 
-        {/* INTERACTIVE KEYBOARD SHORTCUTS BAR (NORMAL MODE) */}
-        <div className="flex flex-wrap items-center justify-between gap-2.5 px-4 py-2.5 rounded-2xl bg-[#11111a] border border-white/10 text-xs">
+        {/* INTERACTIVE KEYBOARD SHORTCUTS BAR (DESKTOP / TABLET ONLY) */}
+        <div className="hidden sm:flex flex-wrap items-center justify-between gap-2.5 px-4 py-2.5 rounded-2xl bg-[#11111a] border border-white/10 text-xs">
           <div className="flex items-center gap-2 text-slate-300">
             <div className="w-6 h-6 rounded-lg bg-[#e50914]/20 border border-[#e50914]/30 flex items-center justify-center text-[#e50914]">
               <Keyboard className="w-3.5 h-3.5" />
