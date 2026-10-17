@@ -179,11 +179,20 @@ export async function getTrending(params: { region?: string; limit?: number; hea
   return list.map(normalizeMovie);
 }
 
-// New Releases
-export async function getNewReleases(): Promise<MovieItem[]> {
-  const data = await fetchBackend<any>("/api/new");
+// New Releases (with Category, Genre, Year & Sort Filtering)
+export async function getNewReleases(params: {
+  page?: number;
+  category?: string;
+  genre?: string;
+  year?: string | number;
+  sort?: string;
+} = {}): Promise<{ items: MovieItem[]; pagination: any }> {
+  const data = await fetchBackend<any>("/api/new", { params });
   const list = Array.isArray(data) ? data : data?.data || [];
-  return list.map(normalizeMovie);
+  return {
+    items: list.map(normalizeMovie),
+    pagination: data?.pagination || { page: 1, totalPages: 1, hasMore: false },
+  };
 }
 
 // Search

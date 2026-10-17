@@ -37,8 +37,8 @@ export function LazyImage({
 
   return (
     <div
-      className={`relative overflow-hidden ${
-        fill ? "w-full h-full" : ""
+      className={`overflow-hidden ${
+        fill ? "absolute inset-0 w-full h-full" : "relative"
       } ${containerClassName}`}
     >
       {/* 1. Shimmer Skeleton Loading State */}

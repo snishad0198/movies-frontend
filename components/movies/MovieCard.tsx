@@ -78,6 +78,13 @@ export function MovieCard({ movie, rank }: MovieCardProps) {
             <span>{movie.releaseYear || "2024"}</span>
             <span className="uppercase">{movie.language || "Hindi"}</span>
           </div>
+          {(movie as any).matchedInAbout && (
+            <div className="mt-1.5">
+              <span className="text-[9px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-1.5 py-0.5 rounded inline-block">
+                Matched in About
+              </span>
+            </div>
+          )}
         </div>
       </Link>
     </div>
