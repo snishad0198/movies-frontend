@@ -627,8 +627,19 @@ export function WatchPlayerView({
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    // Use capture phase { capture: true } so shortcuts trigger before any element stops propagation
+    window.addEventListener("keydown", handleKeyDown, { capture: true });
+    
+    // Auto-refocus window when clicking anywhere near the player to prevent iframe focus lock
+    const handleWindowClick = () => {
+      window.focus();
+    };
+    window.addEventListener("click", handleWindowClick);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown, { capture: true });
+      window.removeEventListener("click", handleWindowClick);
+    };
   }, [
     isFullscreen,
     isSeries,
@@ -781,22 +792,41 @@ export function WatchPlayerView({
                 </div>
               </div>
             ) : streamUrl ? (
-              <iframe
-                ref={iframeRef}
-                key={iframeKey}
-                src={streamUrl}
-                onLoad={handleIframeLoad}
-                title={item.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen *"
-                allowFullScreen={true}
-                // @ts-ignore
-                webkitallowfullscreen="true"
-                // @ts-ignore
-                mozallowfullscreen="true"
-                className={`w-full h-full border-0 ${
-                  isFullscreen ? "h-full w-full" : "absolute inset-0"
-                }`}
-              />
+              <>
+                <iframe
+                  ref={iframeRef}
+                  key={iframeKey}
+                  src={streamUrl}
+                  onLoad={handleIframeLoad}
+                  title={item.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen *"
+                  allowFullScreen={true}
+                  // @ts-ignore
+                  webkitallowfullscreen="true"
+                  // @ts-ignore
+                  mozallowfullscreen="true"
+                  className={`w-full h-full border-0 ${
+                    isFullscreen ? "h-full w-full" : "absolute inset-0"
+                  }`}
+                />
+
+                {/* Animated Visual HUD Notification on Player Actions */}
+                {hudNotice && (
+                  <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center animate-in fade-in zoom-in-90 duration-200">
+                    <div className="px-6 py-3.5 rounded-2xl bg-black/85 backdrop-blur-xl border border-white/20 text-white shadow-2xl flex items-center gap-3">
+                      {hudNotice.icon === "play" && <Play className="w-6 h-6 text-[#e50914] fill-[#e50914]" />}
+                      {hudNotice.icon === "pause" && <Pause className="w-6 h-6 text-amber-400 fill-amber-400" />}
+                      {hudNotice.icon === "forward" && <FastForward className="w-6 h-6 text-emerald-400" />}
+                      {hudNotice.icon === "backward" && <Rewind className="w-6 h-6 text-emerald-400" />}
+                      {hudNotice.icon === "fullscreen" && <Maximize className="w-6 h-6 text-blue-400" />}
+                      {hudNotice.icon === "mute" && <VolumeX className="w-6 h-6 text-red-400" />}
+                      {hudNotice.icon === "next" && <ChevronRight className="w-6 h-6 text-[#e50914]" />}
+                      {hudNotice.icon === "prev" && <ChevronLeft className="w-6 h-6 text-[#e50914]" />}
+                      <span className="font-bold text-sm sm:text-base font-display tracking-wide">{hudNotice.text}</span>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : loadingServers ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 text-xs space-y-2">
                 <Loader2 className="w-7 h-7 animate-spin text-[#e50914]" />
