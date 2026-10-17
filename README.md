@@ -25,6 +25,8 @@ Engineered by **SNishad** ([@snishad.me_](https://instagram.com/snishad.me_)).
 
 ## ☁️ How to Host on Vercel (Recommended — Takes 60 Seconds!)
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fsnishad0198%2Fmovies-frontend&env=NEXT_PUBLIC_SITE_NAME,NEXT_PUBLIC_SITE_URL,NEXT_PUBLIC_BACKEND_URL,BACKEND_INTERNAL_URL,INTERNAL_API_KEY)
+
 Deploying this frontend on Vercel is 100% free and takes 1 minute:
 
 1. Click **"Fork"** on this repository or import `snishad0198/movies-frontend` into [Vercel](https://vercel.com).
