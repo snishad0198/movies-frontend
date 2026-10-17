@@ -41,9 +41,9 @@ export function LazyImage({
         fill ? "w-full h-full" : ""
       } ${containerClassName}`}
     >
-      {/* 1. Shimmer Skeleton Loading State (Scetone Loading) */}
+      {/* 1. Shimmer Skeleton Loading State */}
       {isLoading && validSrc && (
-        <div className="absolute inset-0 z-10 skeleton-shimmer flex items-center justify-center">
+        <div className="absolute inset-0 z-10 skeleton-shimmer flex items-center justify-center pointer-events-none">
           <Film className="w-6 h-6 text-white/10 animate-pulse" />
         </div>
       )}
@@ -58,26 +58,21 @@ export function LazyImage({
         </div>
       )}
 
-      {/* 3. Next.js Optimized Image with Lazy Loading */}
+      {/* 3. Direct Fast Image with immediate decoding and onLoad fallback */}
       {validSrc && (
-        <Image
+        <img
           src={validSrc}
           alt={alt || "Movie poster"}
-          fill={fill}
-          width={!fill ? width : undefined}
-          height={!fill ? height : undefined}
-          sizes={sizes || "(max-width: 640px) 160px, (max-width: 1024px) 240px, 320px"}
-          loading={priority ? undefined : "lazy"}
-          priority={priority}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
           onLoad={() => setIsLoading(false)}
           onError={() => {
             setIsLoading(false);
             setHasError(true);
           }}
-          className={`transition-opacity duration-300 ${
+          className={`w-full h-full object-cover transition-opacity duration-300 ${
             isLoading ? "opacity-0" : "opacity-100"
           } ${className}`}
-          {...rest}
         />
       )}
     </div>
