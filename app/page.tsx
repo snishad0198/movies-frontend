@@ -13,16 +13,12 @@ interface HomePageProps {
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const region = searchParams?.region;
+  const region = searchParams?.region || "IN";
 
   const headerStore = headers();
   const forwardHeaders: Record<string, string> = {};
   const acceptLang = headerStore.get("accept-language");
   if (acceptLang) forwardHeaders["accept-language"] = acceptLang;
-  const cfCountry = headerStore.get("cf-ipcountry");
-  if (cfCountry) forwardHeaders["cf-ipcountry"] = cfCountry;
-  const forwardedFor = headerStore.get("x-forwarded-for");
-  if (forwardedFor) forwardHeaders["x-forwarded-for"] = forwardedFor;
   const cookie = headerStore.get("cookie");
   if (cookie) forwardHeaders["cookie"] = cookie;
 

@@ -4,7 +4,56 @@ import { getMovies, getGenres } from "@/lib/api";
 import { MovieCard } from "@/components/movies/MovieCard";
 import { Film, Filter, Calendar, Award, Flame, Sparkles, Clock, Globe } from "lucide-react";
 
+import type { Metadata } from "next";
+
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ searchParams }: MoviesPageProps): Promise<Metadata> {
+  const cat = searchParams.category;
+  const genre = searchParams.genre;
+  const year = searchParams.year;
+
+  let title = "Watch HD Movies Online & Download Free | Movies.snishad";
+  let description =
+    "Stream and download the latest Bollywood, Hollywood, and South Indian movies in Ultra HD with high-speed direct download mirrors.";
+
+  if (cat && cat !== "all") {
+    const formattedCat = cat.charAt(0).toUpperCase() + cat.slice(1);
+    title = `${formattedCat} Movies in HD - Watch & Download Free | Movies.snishad`;
+    description = `Explore top-rated ${formattedCat} cinema releases. Stream full movies in 1080p and 4K with multiple fast cloud servers on Movies.snishad.`;
+  } else if (genre) {
+    const formattedGenre = genre.charAt(0).toUpperCase() + genre.slice(1);
+    title = `${formattedGenre} Movies - Stream & Download in HD | Movies.snishad`;
+    description = `Watch the best ${formattedGenre} movies online. Direct fast downloads and multi-server cloud playback in 1080p.`;
+  } else if (year) {
+    title = `${year} Movie Releases - Watch & Download in HD | Movies.snishad`;
+    description = `Stream the top movies released in ${year} in Ultra HD with dual audio Hindi and English on Movies.snishad.`;
+  }
+
+  return {
+    title,
+    description,
+    keywords: [
+      "movies download",
+      "watch movies online",
+      "hd movies",
+      "bollywood movies",
+      "hollywood hindi dubbed",
+      "free cinema streaming",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: "https://movies-snishad.vercel.app/movies",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 interface MoviesPageProps {
   searchParams: {

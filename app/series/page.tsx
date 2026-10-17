@@ -4,7 +4,52 @@ import { getSeries, getGenres } from "@/lib/api";
 import { MovieCard } from "@/components/movies/MovieCard";
 import { Tv, Filter, Award, Flame, Sparkles, Clock, Globe } from "lucide-react";
 
+import type { Metadata } from "next";
+
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ searchParams }: SeriesPageProps): Promise<Metadata> {
+  const cat = searchParams.category;
+  const genre = searchParams.genre;
+
+  let title = "Watch Web Series Online Free - All Seasons in HD | Movies.snishad";
+  let description =
+    "Stream and download trending Indian and International web series, K-Dramas, and TV shows in Ultra HD. Multi-server streaming with fast downloads.";
+
+  if (cat && cat !== "all") {
+    const formattedCat = cat.charAt(0).toUpperCase() + cat.slice(1);
+    title = `${formattedCat} Web Series in HD - Stream Online Free | Movies.snishad`;
+    description = `Watch top-rated ${formattedCat} series and episodes online in 1080p. High-speed cloud streaming with dual audio on Movies.snishad.`;
+  } else if (genre) {
+    const formattedGenre = genre.charAt(0).toUpperCase() + genre.slice(1);
+    title = `${formattedGenre} Web Series - Watch Online Free | Movies.snishad`;
+    description = `Stream the best ${formattedGenre} web shows and TV series with all seasons and episodes in HD quality.`;
+  }
+
+  return {
+    title,
+    description,
+    keywords: [
+      "watch web series online",
+      "free series download",
+      "indian web series",
+      "hindi web series hd",
+      "k drama streaming",
+      "movies snishad series",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: "https://movies-snishad.vercel.app/series",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 interface SeriesPageProps {
   searchParams: {

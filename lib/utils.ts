@@ -29,15 +29,13 @@ export function formatViews(views: number): string {
   return views.toString();
 }
 
-const DEFAULT_PLACEHOLDER = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600' viewBox='0 0 400 600' fill='%2314141c'%3E%3Crect width='400' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23e50914' font-family='sans-serif' font-size='24' font-weight='bold'%3ESNISHAD%3C/text%3E%3C/svg%3E";
-
-export function getImageUrl(path?: string | null, fallback = DEFAULT_PLACEHOLDER): string {
-  if (!path) return fallback;
+export function getImageUrl(path?: string | null, fallback = ""): string {
+  if (!path || path.trim().length === 0) return fallback;
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
   }
   if (path.startsWith("/")) {
-    return `https://image.tmdb.org/t/p/original${path}`;
+    return `https://image.tmdb.org/t/p/w500${path}`;
   }
   return path;
 }

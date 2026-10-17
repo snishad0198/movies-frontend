@@ -100,8 +100,9 @@ export async function fetchBackend<T>(endpoint: string, options: FetchOptions = 
 
 // Homepage data (Hero + Curated Rows with Region Trending)
 export async function getHomepage(params: { region?: string; headers?: Record<string, string> } = {}): Promise<HomepageData | null> {
+  const region = params.region || "IN";
   const data = await fetchBackend<HomepageData>("/api/homepage", {
-    params: params.region ? { region: params.region } : undefined,
+    params: { region },
     headers: params.headers,
     cache: "no-store",
   });
@@ -281,6 +282,11 @@ export interface SiteSettingsData {
   announcementActive: boolean;
   customLinks?: string;
   layoutStyle?: string;
+  gaId?: string;
+  googleVerification?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string;
 }
 
 let cachedSettingsInMemory: SiteSettingsData | null = null;
@@ -310,6 +316,11 @@ export const getSettings = cache(async (): Promise<SiteSettingsData> => {
     announcementActive: Boolean(data?.announcementActive),
     customLinks: data?.customLinks || "[]",
     layoutStyle: data?.layoutStyle || "modern",
+    gaId: data?.gaId || undefined,
+    googleVerification: data?.googleVerification || undefined,
+    seoTitle: data?.seoTitle || undefined,
+    seoDescription: data?.seoDescription || undefined,
+    seoKeywords: data?.seoKeywords || undefined,
   };
   cachedSettingsInMemory = result;
   lastSettingsFetch = now;

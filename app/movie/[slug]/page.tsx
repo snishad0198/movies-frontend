@@ -8,6 +8,7 @@ import { formatRating, formatDuration, getImageUrl } from "@/lib/utils";
 import { DownloadCenter } from "@/components/download/DownloadCenter";
 import { CommentSection } from "@/components/comments/CommentSection";
 import { Star, Clock, Calendar, Globe, Share2, Play, Download } from "lucide-react";
+import { WatchlistButton } from "@/components/movies/WatchlistButton";
 
 interface MoviePageProps {
   params: {
@@ -47,6 +48,46 @@ export default async function MovieDetailsPage({ params }: MoviePageProps) {
   const posterUrl = getImageUrl(movie.posterPath);
   const backdropUrl = getImageUrl(movie.backdropPath || movie.posterPath);
   const cleanTmdbId = String(movie.tmdbId || movie.id || "").trim();
+
+  // Determine if title is unreleased / upcoming
+  const isUnreleased = (() => {
+    const status = String((movie as any).status || "").toUpperCase();
+    if (
+      status === "COMING_SOON" ||
+      status === "DRAFT" ||
+      status === "PLANNED" ||
+      status === "IN PRODUCTION" ||
+      status === "POST PRODUCTION"
+    ) {
+      return true;
+    }
+    const dateStr = (movie as any).releaseDate;
+    if (dateStr) {
+      const rDate = new Date(dateStr);
+      if (!isNaN(rDate.getTime()) && rDate.getTime() > Date.now()) {
+        return true;
+      }
+    }
+    const currentYear = new Date().getFullYear();
+    if (movie.releaseYear && movie.releaseYear > currentYear) {
+      return true;
+    }
+    return false;
+  })();
+
+  const formattedReleaseDate = (() => {
+    const dateStr = (movie as any).releaseDate;
+    if (dateStr) {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+      }
+    }
+    if (movie.releaseYear) {
+      return `Expected in ${movie.releaseYear}`;
+    }
+    return "Coming Soon in 2026";
+  })();
 
   // JSON-LD Structured Data
   const jsonLd = {
@@ -176,37 +217,85 @@ export default async function MovieDetailsPage({ params }: MoviePageProps) {
             </div>
 
             {/* PRIMARY ACTION CTA BUTTONS */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-4">
-              <Link
-                href={`/watch/${movie.slug}`}
-                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#e50914] hover:bg-red-700 text-white font-black text-sm uppercase tracking-wider shadow-xl shadow-red-600/40 hover:scale-[1.02] transition-all cursor-pointer"
-              >
-                <Play className="w-4 h-4 fill-white" />
-                <span>Watch Now in HD</span>
-              </Link>
-              <a
-                href={`https://02moviedownloader.top/api/download/movie/${cleanTmdbId || movie.imdbId || movie.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm border border-white/10 transition-all cursor-pointer"
-              >
-                <Download className="w-4 h-4 text-blue-400" />
-                <span>Download Full Movie</span>
-              </a>
-            </div>
+            {isUnreleased ? (
+              <div className="space-y-4 pt-4">
+                <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200 space-y-2 text-left">
+                  <div className="flex items-center gap-2 text-amber-400 font-bold text-xs sm:text-sm uppercase tracking-wider">
+                    <Calendar className="w-4 h-4 text-amber-400" />
+                    <span>Upcoming Theatrical &amp; OTT Release</span>
+                  </div>
+                  <div className="text-xl sm:text-2xl font-black text-white">
+                    Releasing: <span className="text-amber-400">{formattedReleaseDate}</span>
+                  </div>
+                  <p className="text-xs text-neutral-300 leading-relaxed">
+                    This movie has not been released yet. Official HD streaming and high-speed direct download mirrors will unlock here immediately on release day.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+                  {movie.trailerUrl && (
+                    <a
+                      href={movie.trailerUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-[#e50914] hover:bg-red-700 text-white font-bold text-sm uppercase tracking-wider shadow-xl shadow-red-600/30 transition-all cursor-pointer"
+                    >
+                      <Play className="w-4 h-4 fill-white" />
+                      <span>Watch Official Trailer</span>
+                    </a>
+                  )}
+                  <WatchlistButton
+                    movie={movie}
+                    showText={true}
+                    className="!px-6 !py-3.5 !rounded-2xl !bg-white/10 hover:!bg-white/15 !text-white !font-bold !text-sm !border !border-white/10"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-4">
+                <Link
+                  href={`/watch/${movie.slug}`}
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-[#e50914] hover:bg-red-700 text-white font-black text-sm uppercase tracking-wider shadow-xl shadow-red-600/40 hover:scale-[1.02] transition-all cursor-pointer"
+                >
+                  <Play className="w-4 h-4 fill-white" />
+                  <span>Watch Now in HD</span>
+                </Link>
+                <a
+                  href={`https://02moviedownloader.top/api/download/movie/${cleanTmdbId || movie.imdbId || movie.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm border border-white/10 transition-all cursor-pointer"
+                >
+                  <Download className="w-4 h-4 text-blue-400" />
+                  <span>Download Full Movie</span>
+                </a>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Download Section */}
-        <div id="downloads">
-          <DownloadCenter
-            title={movie.title}
-            tmdbId={movie.tmdbId}
-            imdbId={movie.imdbId}
-            movieId={movie.id}
-            type="MOVIE"
-          />
-        </div>
+        {/* Download Section (Only for released movies) */}
+        {!isUnreleased ? (
+          <div id="downloads">
+            <DownloadCenter
+              title={movie.title}
+              tmdbId={movie.tmdbId}
+              imdbId={movie.imdbId}
+              movieId={movie.id}
+              type="MOVIE"
+            />
+          </div>
+        ) : (
+          <div className="p-8 rounded-2xl bg-[#121218] border border-white/10 text-center space-y-3 my-8">
+            <Calendar className="w-10 h-10 text-amber-400 mx-auto" />
+            <h3 className="text-lg font-bold text-white uppercase tracking-wider">
+              Downloads Locked Until Official Release
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">
+              Direct high-speed download mirrors (480p, 720p, 1080p FHD, 4K UHD) will be unlocked here on <strong className="text-white">{formattedReleaseDate}</strong>.
+            </p>
+          </div>
+        )}
 
         {/* Audience Comments & Reviews Section */}
         <div id="reviews">

@@ -1,0 +1,52 @@
+{
+  "name": "Movies.snishad - Watch & Download Free HD Movies",
+  "short_name": "Movies.snishad",
+  "description": "Stream and download the latest Bollywood, Hollywood, South Indian movies, trending web series, and anime in Ultra HD with high-speed direct download mirrors.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08080c",
+  "theme_color": "#e50914",
+  "orientation": "any",
+  "categories": ["entertainment", "movies", "video"],
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48 32x32 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Trending Today",
+      "url": "/trending",
+      "description": "See top trending movies and shows"
+    },
+    {
+      "name": "New Releases",
+      "url": "/new",
+      "description": "Discover fresh cinema arrivals"
+    },
+    {
+      "name": "Browse Movies",
+      "url": "/movies",
+      "description": "Watch Bollywood and Hollywood cinema"
+    },
+    {
+      "name": "Web Series",
+      "url": "/series",
+      "description": "Stream all seasons and episodes"
+    }
+  ]
+}

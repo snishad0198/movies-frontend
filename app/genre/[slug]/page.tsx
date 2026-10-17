@@ -9,7 +9,37 @@ interface GenrePageProps {
   };
 }
 
+import type { Metadata } from "next";
+
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: GenrePageProps): Promise<Metadata> {
+  const genreName = params.slug.charAt(0).toUpperCase() + params.slug.slice(1);
+  const title = `Best ${genreName} Movies & Series - Watch & Download | Movies.snishad`;
+  const description = `Explore top-rated ${genreName} movies and TV shows in Ultra HD. Stream online in 1080p with multiple fast cloud mirrors and direct downloads on Movies.snishad.`;
+
+  return {
+    title,
+    description,
+    keywords: [
+      `${genreName.toLowerCase()} movies`,
+      `watch ${genreName.toLowerCase()} online`,
+      `${genreName.toLowerCase()} series`,
+      "movies snishad",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://movies-snishad.vercel.app/genre/${params.slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 export default async function GenrePage({ params }: GenrePageProps) {
   const genres = await getGenres();

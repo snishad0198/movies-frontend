@@ -68,11 +68,11 @@ export function HeroBanner({ items }: HeroBannerProps) {
         <div className="max-w-2xl space-y-3.5">
           {/* Metadata Badges */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-[#e50914] text-white shadow-sm">
+            <span className="px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-[#e50914] text-white shadow-sm">
               {isSeries ? "Featured Series" : "Featured Movie"}
             </span>
             {rating !== null && rating !== undefined && (
-              <div className="flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-semibold bg-black/70 text-[#f5c518] border border-white/10 backdrop-blur-md">
+              <div className="flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-semibold bg-black/70 text-[#f5c518] border border-white/10 backdrop-blur-md">
                 <Star className="w-3.5 h-3.5 fill-[#f5c518]" />
                 <span>{formatRating(rating)} IMDb</span>
               </div>
@@ -80,38 +80,25 @@ export function HeroBanner({ items }: HeroBannerProps) {
             <span className="text-xs text-slate-300 font-medium px-1">
               {current.releaseYear} &bull; {isSeries ? "All Seasons" : formatDuration(current.runtime)}
             </span>
+            {current.genres && current.genres.length > 0 && (
+              <span className="text-xs text-slate-400 hidden sm:inline">
+                &bull; {current.genres.slice(0, 2).map((g: any) => g?.genre?.name || g?.name).filter(Boolean).join(", ")}
+              </span>
+            )}
           </div>
 
           {/* Title */}
-          <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.1] drop-shadow-2xl line-clamp-2 sm:line-clamp-3">
+          <h1 className="font-display text-2xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.1] drop-shadow-2xl line-clamp-2 sm:line-clamp-3">
             {current.title}
           </h1>
 
           {/* Synopsis */}
-          <p className="text-slate-300 text-xs sm:text-sm lg:text-base line-clamp-3 leading-relaxed drop-shadow max-w-xl">
+          <p className="text-slate-300 text-xs sm:text-sm lg:text-base line-clamp-2 sm:line-clamp-3 leading-relaxed drop-shadow max-w-xl">
             {current.overview || "Stream in 4K Ultra-HD with multiple high-speed servers and direct download links on Movies.snishad."}
           </p>
 
-          {/* Genres Strip */}
-          {current.genres && current.genres.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {current.genres.slice(0, 3).map((g, idx) => {
-                const genreName = g?.genre?.name || (g as any)?.name;
-                if (!genreName) return null;
-                return (
-                  <span
-                    key={(g as any)?.genre?.id || (g as any)?.id || idx}
-                    className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-white/5 border border-white/10 text-slate-300"
-                  >
-                    {genreName}
-                  </span>
-                );
-              })}
-            </div>
-          )}
-
           {/* Action CTAs */}
-          <div className="flex flex-wrap items-center gap-3 pt-3">
+          <div className="flex flex-wrap items-center gap-2.5 pt-2">
             <Link
               href={watchHref}
               className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-[#e50914] hover:bg-[#f40612] text-white font-bold text-sm transition-all shadow-lg shadow-red-600/30 hover:scale-105 cursor-pointer"

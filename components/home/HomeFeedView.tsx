@@ -112,57 +112,59 @@ export function HomeFeedView({ initialRows, genres, userRegion }: HomeFeedViewPr
 
   return (
     <div className="space-y-6">
-      {/* Category Navigation Pills Bar & Country Region Switcher */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 relative z-30 space-y-3">
-        {/* Main Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
-          {CATEGORY_TABS.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer select-none ${
-                  isActive
-                    ? "bg-[#e50914] text-white shadow-lg shadow-red-600/30 scale-[1.03]"
-                    : "bg-[#161624]/90 hover:bg-[#1f1f33] text-slate-300 hover:text-white border border-white/10 backdrop-blur-md"
-                }`}
-              >
-                <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-slate-400"}`} />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Clean Genre Quick-Filters Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1 pb-1">
-          <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1 pl-1 flex-shrink-0">
-            <Sparkles className="w-3.5 h-3.5 text-[#e50914]" />
-            <span>Popular Genres:</span>
-          </span>
-          {genres
-            .filter((g) => {
-              const name = (g?.name || "").toLowerCase();
-              const slug = (g?.slug || "").toLowerCase();
+      {/* Category Navigation Pills Bar & Quick Filters */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 pt-2 pb-2">
+        <div className="bg-[#121218]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-2 sm:p-2.5 shadow-2xl space-y-2">
+          {/* Main Category Segmented Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth">
+            {CATEGORY_TABS.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
               return (
-                !name.includes("18+") &&
-                !name.includes("adult") &&
-                !slug.includes("18+") &&
-                !slug.includes("adult")
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer select-none ${
+                    isActive
+                      ? "bg-[#e50914] text-white shadow-md shadow-red-600/30 font-bold"
+                      : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-slate-400"}`} />
+                  <span>{tab.label}</span>
+                </button>
               );
-            })
-            .slice(0, 10)
-            .map((genre) => (
-              <Link
-                key={genre.id}
-                href={`/movies?genre=${genre.slug}`}
-                className="px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white text-xs font-medium border border-white/5 transition-all flex-shrink-0 cursor-pointer"
-              >
-                {genre.name}
-              </Link>
-            ))}
+            })}
+          </div>
+
+          {/* Clean Genre Quick-Filters Bar */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1 border-t border-white/5">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 pl-1 flex-shrink-0">
+              <Sparkles className="w-3 h-3 text-[#e50914]" />
+              <span>Genres:</span>
+            </span>
+            {genres
+              .filter((g) => {
+                const name = (g?.name || "").toLowerCase();
+                const slug = (g?.slug || "").toLowerCase();
+                return (
+                  !name.includes("18+") &&
+                  !name.includes("adult") &&
+                  !slug.includes("18+") &&
+                  !slug.includes("adult")
+                );
+              })
+              .slice(0, 10)
+              .map((genre) => (
+                <Link
+                  key={genre.id}
+                  href={`/movies?genre=${genre.slug}`}
+                  className="px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/10 text-slate-300 hover:text-white text-[11px] font-medium border border-white/5 transition-all flex-shrink-0 cursor-pointer"
+                >
+                  {genre.name}
+                </Link>
+              ))}
+          </div>
         </div>
       </div>
 

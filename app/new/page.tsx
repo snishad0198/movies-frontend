@@ -16,7 +16,35 @@ import {
   RotateCcw,
 } from "lucide-react";
 
+import type { Metadata } from "next";
+
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "New Releases (2026) - Watch Latest Movies & Series in HD | Movies.snishad",
+  description:
+    "Discover the latest 2026 cinema releases, trending Bollywood blockbusters, Hollywood hits, anime, and OTT web series. Stream in Ultra HD with fast direct downloads on Movies.snishad.",
+  keywords: [
+    "new movie releases",
+    "latest web series",
+    "2026 movies",
+    "new bollywood movies",
+    "watch latest cinema",
+    "movies snishad new releases",
+  ],
+  openGraph: {
+    title: "New Releases (2026) - Latest Movies & Series | Movies.snishad",
+    description:
+      "Explore newly released cinema blockbusters, fresh OTT seasons, and trending anime in Ultra HD.",
+    type: "website",
+    url: "https://movies-snishad.vercel.app/new",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "New Releases (2026) | Movies.snishad",
+    description: "Stream and download newly released movies and series in HD.",
+  },
+};
 
 interface NewReleasesPageProps {
   searchParams: {
@@ -136,13 +164,10 @@ export default async function NewReleasesPage({ searchParams }: NewReleasesPageP
         </div>
       </div>
 
-      {/* 2. Format & Category Filter Strip */}
-      <div className="space-y-3">
-        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-          <Filter className="w-3.5 h-3.5 text-[#e50914]" />
-          <span>Category &amp; Industry</span>
-        </div>
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+      {/* 2. Unified Streaming Control Toolbar */}
+      <div className="bg-[#121218]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-3 sm:p-4 shadow-2xl space-y-3">
+        {/* Category Pills (Row 1) */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth pb-1">
           {NEW_CATEGORIES.map((cat) => {
             const Icon = cat.icon;
             const isActive = category === cat.id;
@@ -150,116 +175,81 @@ export default async function NewReleasesPage({ searchParams }: NewReleasesPageP
               <Link
                 key={cat.id}
                 href={buildUrl({ category: cat.id, page: 1 })}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? "bg-[#e50914] text-white shadow-md shadow-red-600/30 scale-[1.02]"
-                    : "bg-[#14141f] hover:bg-[#1c1c2b] text-slate-300 hover:text-white border border-white/5"
+                    ? "bg-[#e50914] text-white shadow-md shadow-red-600/30 font-bold"
+                    : "text-slate-400 hover:text-white hover:bg-white/5"
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-slate-400"}`} />
                 <span>{cat.label}</span>
               </Link>
             );
           })}
         </div>
-      </div>
 
-      {/* 3. Year & Decade Filters */}
-      <div className="space-y-2">
-        <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-          <Calendar className="w-3.5 h-3.5 text-blue-400" />
-          <span>Release Year</span>
-        </div>
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
-          {YEAR_OPTIONS.map((y) => {
-            const isActive = (y.id === "all" && (!year || year === "all")) || year === y.id;
-            return (
-              <Link
-                key={y.id}
-                href={buildUrl({ year: y.id, page: 1 })}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
-                  isActive
-                    ? "bg-white/20 text-white font-bold border border-white/30"
-                    : "bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-200 border border-white/5"
-                }`}
-              >
-                {y.label}
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 4. Genres Filter Pills */}
-      {genres.length > 0 && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Genres
+        {/* Secondary Filters Bar: Year, Genres & Active Status (Row 2) */}
+        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/5 text-xs">
+          {/* Release Year */}
+          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar flex-shrink-0">
+            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mr-1">
+              Year:
             </span>
-            {genre && (
-              <Link
-                href={buildUrl({ genre: undefined, page: 1 })}
-                className="text-xs text-[#e50914] hover:underline"
-              >
-                Clear genre filter
-              </Link>
-            )}
-          </div>
-          <div className="flex flex-wrap items-center gap-1.5">
-            {genres.map((g) => {
-              const isActive = genre === g.slug;
+            {YEAR_OPTIONS.map((y) => {
+              const isActive = (y.id === "all" && (!year || year === "all")) || year === y.id;
               return (
                 <Link
-                  key={g.id || g.slug}
-                  href={buildUrl({ genre: isActive ? undefined : g.slug, page: 1 })}
-                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                  key={y.id}
+                  href={buildUrl({ year: y.id, page: 1 })}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
                     isActive
-                      ? "bg-[#e50914] text-white font-semibold shadow-sm"
-                      : "bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5"
+                      ? "bg-white/20 text-white font-bold border border-white/30"
+                      : "bg-white/[0.03] hover:bg-white/10 text-slate-400 hover:text-white"
                   }`}
                 >
-                  {g.name}
+                  {y.label.replace(" Releases", "").replace(" Hits", "")}
                 </Link>
               );
             })}
           </div>
-        </div>
-      )}
 
-      {/* 5. Active Filters Summary Bar */}
-      {hasActiveFilters && (
-        <div className="flex flex-wrap items-center gap-2 p-3 rounded-2xl bg-white/[0.03] border border-white/10 text-xs text-slate-300">
-          <span className="font-semibold text-white">Active Filters:</span>
-          {category !== "all" && (
-            <span className="px-2 py-0.5 rounded-lg bg-[#e50914]/20 text-[#e50914] border border-[#e50914]/30 uppercase font-semibold">
-              Category: {category}
-            </span>
+          {/* Quick Genre Pills */}
+          {genres.length > 0 && (
+            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar flex-1 min-w-[200px]">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mr-1">
+                Genre:
+              </span>
+              {genres.slice(0, 8).map((g) => {
+                const isActive = genre === g.slug;
+                return (
+                  <Link
+                    key={g.id || g.slug}
+                    href={buildUrl({ genre: isActive ? undefined : g.slug, page: 1 })}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                      isActive
+                        ? "bg-[#e50914] text-white font-bold shadow-sm"
+                        : "bg-white/[0.03] hover:bg-white/10 text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    {g.name}
+                  </Link>
+                );
+              })}
+            </div>
           )}
-          {genre && (
-            <span className="px-2 py-0.5 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30 font-semibold">
-              Genre: {genre}
-            </span>
+
+          {/* Active Filter Clear Tag */}
+          {hasActiveFilters && (
+            <Link
+              href="/new"
+              className="ml-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-red-600/15 border border-red-500/30 text-[#e50914] hover:bg-red-600/25 text-xs font-bold transition-all cursor-pointer flex-shrink-0"
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span>Reset All</span>
+            </Link>
           )}
-          {year && year !== "all" && (
-            <span className="px-2 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold">
-              Year: {year}
-            </span>
-          )}
-          {sort !== "latest" && (
-            <span className="px-2 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 font-semibold">
-              Sort: {sort}
-            </span>
-          )}
-          <Link
-            href="/new"
-            className="ml-auto inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white underline cursor-pointer"
-          >
-            <RotateCcw className="w-3 h-3" />
-            <span>Reset Filters</span>
-          </Link>
         </div>
-      )}
+      </div>
 
       {/* 6. Titles Grid */}
       {items.length > 0 ? (

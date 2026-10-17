@@ -5,7 +5,33 @@ import { getTrending } from "@/lib/api";
 import { TrendingLeaderboard } from "@/components/trending/TrendingLeaderboard";
 import { Flame, Globe, Sparkles } from "lucide-react";
 
+import type { Metadata } from "next";
+
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Top Trending Movies & Web Series Today | Movies.snishad",
+  description:
+    "See what's trending across India and worldwide today. Top 10 viral movies and trending web series streaming in Ultra HD on Movies.snishad.",
+  keywords: [
+    "trending movies today",
+    "viral web series",
+    "top 10 movies india",
+    "hot releases",
+    "movies snishad trending",
+  ],
+  openGraph: {
+    title: "Trending Movies & Series Today | Movies.snishad",
+    description: "Stream the most popular movies and shows watched across the globe in Ultra-HD.",
+    type: "website",
+    url: "https://movies-snishad.vercel.app/trending",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Trending Movies & Shows Today | Movies.snishad",
+    description: "Explore the daily leaderboard of top trending movies & web series.",
+  },
+};
 
 interface TrendingPageProps {
   searchParams: {

@@ -29,38 +29,53 @@ export function LazyImage({
   fallbackText,
   ...rest
 }: LazyImageProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
+  const imgRef = React.useRef<HTMLImageElement | null>(null);
 
   // If no source or invalid
   const validSrc = typeof src === "string" && src.trim().length > 0 && !hasError ? src : null;
 
+  React.useEffect(() => {
+    if (imgRef.current) {
+      if (imgRef.current.complete && imgRef.current.naturalWidth > 0) {
+        setIsLoading(false);
+      }
+    }
+  }, [validSrc]);
+
   return (
     <div
-      className={`overflow-hidden ${
+      className={`overflow-hidden bg-[#121218] ${
         fill ? "absolute inset-0 w-full h-full" : "relative"
       } ${containerClassName}`}
     >
-      {/* 1. Shimmer Skeleton Loading State */}
+      {/* 1. Shimmer Skeleton Loading State (only shown briefly until image loads) */}
       {isLoading && validSrc && (
-        <div className="absolute inset-0 z-10 skeleton-shimmer flex items-center justify-center pointer-events-none">
-          <Film className="w-6 h-6 text-white/10 animate-pulse" />
+        <div className="absolute inset-0 z-10 bg-[#161622] animate-pulse flex items-center justify-center pointer-events-none">
+          <Film className="w-6 h-6 text-white/10" />
         </div>
       )}
 
-      {/* 2. Error / Fallback State */}
+      {/* 2. Error / Fallback State with gradient and readable text */}
       {(!validSrc || hasError) && (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#131320] border border-white/5 p-3 text-center">
-          <Film className="w-8 h-8 text-white/20 mb-1.5" />
-          <span className="text-[11px] font-semibold text-slate-400 line-clamp-2">
-            {fallbackText || alt || "Poster Unavailable"}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gradient-to-b from-[#181824] to-[#0c0c14] border border-white/5 p-3 text-center">
+          <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mb-2">
+            <Film className="w-5 h-5 text-[#e50914]" />
+          </div>
+          <span className="text-xs font-bold text-slate-200 line-clamp-2 px-1">
+            {fallbackText || alt || "Movies.snishad"}
+          </span>
+          <span className="text-[10px] text-slate-500 mt-1 uppercase tracking-wider font-semibold">
+            Ultra HD
           </span>
         </div>
       )}
 
-      {/* 3. Direct Fast Image with immediate decoding and onLoad fallback */}
+      {/* 3. Direct Fast Image */}
       {validSrc && (
         <img
+          ref={imgRef}
           src={validSrc}
           alt={alt || "Movie poster"}
           loading={priority ? "eager" : "lazy"}
@@ -70,9 +85,7 @@ export function LazyImage({
             setIsLoading(false);
             setHasError(true);
           }}
-          className={`w-full h-full object-cover transition-opacity duration-300 ${
-            isLoading ? "opacity-0" : "opacity-100"
-          } ${className}`}
+          className={`w-full h-full object-cover transition-transform duration-300 ${className}`}
         />
       )}
     </div>

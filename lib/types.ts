@@ -65,6 +65,8 @@ export interface MovieItem {
   overview?: string | null;
   description?: string | null;
   releaseYear?: number | null;
+  releaseDate?: string | null;
+  status?: string | null;
   runtime?: number | null;
   poster?: string | null;
   posterPath?: string | null;
