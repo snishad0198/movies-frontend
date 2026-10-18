@@ -10,9 +10,10 @@ export { MovieCardSkeleton } from "@/components/ui/MovieCardSkeleton";
 interface MovieCardProps {
   movie: MovieItem;
   rank?: number;
+  priority?: boolean;
 }
 
-export function MovieCard({ movie, rank }: MovieCardProps) {
+export function MovieCard({ movie, rank, priority = false }: MovieCardProps) {
   const isSeries = movie.type === "SERIES";
   const href = isSeries ? `/series/${movie.slug}` : `/movie/${movie.slug}`;
   const posterUrl = getImageUrl(movie.posterPath || (movie as any).poster);
@@ -20,29 +21,33 @@ export function MovieCard({ movie, rank }: MovieCardProps) {
 
   return (
     <div className="group relative flex-shrink-0 select-none">
-      <Link href={href} prefetch={false} className="block relative overflow-hidden rounded-xl bg-[#14141c] border border-white/5 shadow-md group-hover:border-red-600/40 group-hover:shadow-2xl group-hover:shadow-red-950/30 transition-all duration-300">
+      <Link
+        href={href}
+        prefetch={false}
+        className="block relative overflow-hidden rounded-md sm:rounded-xl bg-[#14141c] border border-white/5 shadow-md group-hover:border-red-600/40 group-hover:shadow-2xl group-hover:shadow-red-950/30 transition-all duration-300"
+      >
         {/* Poster Image Container */}
-        <div className="relative aspect-[2/3] w-full overflow-hidden">
+        <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#161620]">
           <LazyImage
             src={posterUrl}
             alt={movie.title}
             fill
-            sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, 240px"
+            priority={priority}
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             fallbackText={movie.title}
           />
 
           {/* Vignette & Play Icon on Hover */}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-            <div className="w-12 h-12 rounded-full bg-[#e50914] text-white flex items-center justify-center shadow-lg shadow-red-600/40 transform scale-75 group-hover:scale-100 transition-transform duration-200">
-              <Play className="w-5 h-5 fill-white ml-0.5" />
+            <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-full bg-[#e50914] text-white flex items-center justify-center shadow-lg shadow-red-600/40 transform scale-75 group-hover:scale-100 transition-transform duration-200">
+              <Play className="w-4 sm:w-5 h-4 sm:h-5 fill-white ml-0.5" />
             </div>
           </div>
 
           {/* Series Badge (Top Left) */}
           {isSeries && (
-            <div className="absolute top-2 left-2 flex items-center gap-1">
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-600/80 backdrop-blur-md text-white">
+            <div className="absolute top-1.5 sm:top-2 left-1.5 sm:left-2 flex items-center gap-1">
+              <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-blue-600/85 backdrop-blur-md text-white shadow-sm">
                 Series
               </span>
             </div>
@@ -50,36 +55,46 @@ export function MovieCard({ movie, rank }: MovieCardProps) {
 
           {/* Rating Badge (Top Right) */}
           {rating !== null && rating !== undefined && (
-            <div className="absolute top-2 right-2 flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-black/70 backdrop-blur-md text-[#f5c518] border border-white/10">
-              <Star className="w-3.5 h-3.5 fill-[#f5c518]" />
+            <div className="absolute top-1.5 sm:top-2 right-1.5 sm:right-2 flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-semibold bg-black/75 backdrop-blur-md text-[#f5c518] border border-white/10 shadow-sm">
+              <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-[#f5c518]" />
               <span>{formatRating(rating)}</span>
             </div>
           )}
 
           {/* Quick Bookmark Button (Bottom Right) */}
-          <div className="absolute bottom-2 right-2 z-10 opacity-80 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <div className="absolute bottom-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <WatchlistButton movie={movie} className="p-1.5 rounded-lg border backdrop-blur-md" />
           </div>
 
-          {/* Optional Ranking Number (For Trending Top 10) */}
+          {/* Iconic Netflix Top 10 Outlined Typography */}
           {rank !== undefined && (
-            <div className="absolute -bottom-4 -left-2 text-6xl sm:text-7xl font-display font-black text-white/90 drop-shadow-[0_4px_10px_rgba(0,0,0,0.9)] stroke-black pointer-events-none">
+            <div
+              className="absolute -bottom-2 sm:-bottom-3 -left-1 sm:-left-2 text-6xl sm:text-7xl lg:text-8xl font-display font-black leading-none select-none pointer-events-none drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)]"
+              style={{
+                color: "#08080c",
+                WebkitTextStroke: "2.5px #737380",
+                textShadow: "0 0 16px rgba(0,0,0,0.9)",
+              }}
+            >
               {rank}
             </div>
           )}
         </div>
 
         {/* Title & Metadata Strip */}
-        <div className="p-3 bg-[#121218]">
-          <h3 className="text-xs sm:text-sm font-semibold text-slate-100 truncate group-hover:text-[#e50914] transition-colors" title={movie.title}>
+        <div className="p-2 sm:p-3 bg-[#111116]">
+          <h3
+            className="text-xs sm:text-sm font-semibold text-slate-100 truncate group-hover:text-[#e50914] transition-colors"
+            title={movie.title}
+          >
             {movie.title}
           </h3>
-          <div className="flex items-center justify-between text-[11px] text-slate-400 mt-1">
+          <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400 mt-0.5 sm:mt-1">
             <span>{movie.releaseYear || "2024"}</span>
-            <span className="uppercase">{movie.language || "Hindi"}</span>
+            <span className="uppercase text-[9px] sm:text-[10px] tracking-wider">{movie.language || "Hindi"}</span>
           </div>
           {(movie as any).matchedInAbout && (
-            <div className="mt-1.5">
+            <div className="mt-1">
               <span className="text-[9px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-1.5 py-0.5 rounded inline-block">
                 Matched in About
               </span>
@@ -90,3 +105,4 @@ export function MovieCard({ movie, rank }: MovieCardProps) {
     </div>
   );
 }
+

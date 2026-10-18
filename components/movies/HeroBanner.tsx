@@ -64,10 +64,10 @@ export function HeroBanner({ items }: HeroBannerProps) {
       </div>
 
       {/* Hero Content Container with guaranteed top clearance for fixed header */}
-      <div className="relative z-20 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pt-24 sm:pt-36 lg:pt-40 pb-14 sm:pb-20">
-        <div className="max-w-2xl space-y-3">
+      <div className="relative z-20 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-end pt-20 sm:pt-36 lg:pt-40 pb-10 sm:pb-20">
+        <div className="max-w-2xl space-y-2.5 sm:space-y-3 mx-auto sm:mx-0 flex flex-col items-center sm:items-start text-center sm:text-left">
           {/* Metadata Badges */}
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 sm:gap-2">
             <span className="px-2 sm:px-2.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-[#e50914] text-white shadow-sm">
               {isSeries ? "Featured Series" : "Featured Movie"}
             </span>
@@ -80,31 +80,67 @@ export function HeroBanner({ items }: HeroBannerProps) {
             <span className="text-xs text-slate-300 font-medium px-1">
               {current.releaseYear} &bull; {isSeries ? "All Seasons" : formatDuration(current.runtime)}
             </span>
-            {current.genres && current.genres.length > 0 && (
-              <span className="text-xs text-slate-400 hidden sm:inline">
-                &bull; {current.genres.slice(0, 2).map((g: any) => g?.genre?.name || g?.name).filter(Boolean).join(", ")}
-              </span>
-            )}
           </div>
+
+          {/* Centered Genre Dots on Mobile */}
+          {current.genres && current.genres.length > 0 && (
+            <div className="text-xs text-slate-300 font-medium flex items-center justify-center sm:justify-start gap-1.5">
+              {current.genres.slice(0, 3).map((g: any, i: number) => (
+                <React.Fragment key={i}>
+                  {i > 0 && <span className="text-[#e50914] font-bold">&bull;</span>}
+                  <span>{g?.genre?.name || g?.name}</span>
+                </React.Fragment>
+              ))}
+            </div>
+          )}
 
           {/* Title */}
           <h1 className="font-display text-2xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight uppercase leading-[1.1] drop-shadow-2xl line-clamp-2 sm:line-clamp-3">
             {current.title}
           </h1>
 
-          {/* Synopsis */}
-          <p className="text-slate-300 text-xs sm:text-sm lg:text-base line-clamp-2 sm:line-clamp-3 leading-relaxed drop-shadow max-w-xl">
+          {/* Synopsis (hidden or truncated on small mobile to keep Netflix billboard clean) */}
+          <p className="text-slate-300 text-xs sm:text-sm lg:text-base line-clamp-2 sm:line-clamp-3 leading-relaxed drop-shadow max-w-xl hidden sm:block">
             {current.overview || "Stream in 4K Ultra-HD with multiple high-speed servers and direct download links on Movies.snishad."}
           </p>
 
-          {/* Action CTAs (Mobile Responsive Touch Grid) */}
-          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-2.5 pt-2">
+          {/* Netflix Signature Mobile Action Bar (sm:hidden) */}
+          <div className="flex sm:hidden items-center justify-center gap-7 w-full pt-3 pb-1">
+            {/* 1. My List Vertical Button */}
+            <WatchlistButton
+              movie={current}
+              netflixMobile={true}
+            />
+
+            {/* 2. Netflix Signature White Play Button */}
             <Link
               href={watchHref}
-              className="col-span-2 sm:col-span-1 inline-flex items-center justify-center gap-2.5 px-6 py-2.5 sm:py-3 rounded-xl bg-[#e50914] hover:bg-[#f40612] text-white font-bold text-sm transition-all shadow-lg shadow-red-600/30 hover:scale-[1.02] cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded-md bg-white hover:bg-neutral-200 text-black font-extrabold text-sm transition-all shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
             >
-              <Play className="w-4 h-4 fill-white" />
-              <span>Watch Now</span>
+              <Play className="w-5 h-5 fill-black" />
+              <span>Play</span>
+            </Link>
+
+            {/* 3. Details Info Button */}
+            <Link
+              href={detailHref}
+              className="flex flex-col items-center gap-1 text-slate-300 hover:text-white transition-colors cursor-pointer select-none"
+            >
+              <div className="w-8 h-8 rounded-full border border-white/20 bg-black/40 flex items-center justify-center hover:border-white/40">
+                <Info className="w-4 h-4 stroke-[2.2]" />
+              </div>
+              <span className="text-[10px] font-semibold tracking-tight">Info</span>
+            </Link>
+          </div>
+
+          {/* Desktop Action CTAs (hidden on mobile, visible on sm:) */}
+          <div className="hidden sm:flex flex-wrap items-center gap-2.5 pt-2">
+            <Link
+              href={watchHref}
+              className="inline-flex items-center justify-center gap-2.5 px-6 py-2.5 sm:py-3 rounded-xl bg-white hover:bg-neutral-200 text-black font-extrabold text-sm transition-all shadow-xl hover:scale-[1.02] cursor-pointer"
+            >
+              <Play className="w-4 h-4 fill-black" />
+              <span>Play Now</span>
             </Link>
 
             {trailerEmbed && (
@@ -127,7 +163,7 @@ export function HeroBanner({ items }: HeroBannerProps) {
             <WatchlistButton
               movie={current}
               showText={true}
-              className="col-span-2 sm:col-span-1 !w-full sm:!w-auto !justify-center !px-4 !py-2.5 sm:!py-3 !rounded-xl !bg-black/50 hover:!bg-black/70 !text-slate-300 hover:!text-white font-medium text-xs sm:text-sm !border !border-white/10 !backdrop-blur-md cursor-pointer"
+              className="!w-auto !justify-center !px-4 !py-2.5 sm:!py-3 !rounded-xl !bg-black/50 hover:!bg-black/70 !text-slate-300 hover:!text-white font-medium text-xs sm:text-sm !border !border-white/10 !backdrop-blur-md cursor-pointer"
             />
           </div>
         </div>

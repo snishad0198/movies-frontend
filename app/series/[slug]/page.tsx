@@ -261,119 +261,122 @@ export default function SeriesDetailsPage({ params }: SeriesPageProps) {
             </p>
           </div>
         ) : (
-        <div className="p-6 rounded-2xl bg-[#121218] border border-white/10 my-8 shadow-xl">
-          <div className="flex items-center gap-2 mb-6">
-            <Layers className="w-5 h-5 text-[#e50914]" />
-            <h3 className="text-lg font-bold text-white font-display uppercase tracking-wide">
-              Seasons &amp; Episodes
-            </h3>
-          </div>
-
-          {/* Season Tabs */}
-          {series.seasons && series.seasons.length > 0 && (
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-4 border-b border-white/5 mb-6">
-              {series.seasons.map((s) => {
-                const sNum = s.seasonNumber ?? s.seasonNum ?? 1;
-                return (
-                  <button
-                    key={s.id}
-                    onClick={() => {
-                      setActiveSeasonNum(sNum);
-                      if (s.episodes && s.episodes.length > 0) {
-                        setActiveEpisode(s.episodes[0]);
-                      }
-                    }}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex-shrink-0 cursor-pointer ${
-                      activeSeasonNum === sNum
-                        ? "bg-[#e50914] text-white shadow-lg shadow-red-600/30"
-                        : "bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    Season {sNum}
-                  </button>
-                );
-              })}
+          <div className="p-6 rounded-2xl bg-[#121218] border border-white/10 my-8 shadow-xl">
+            <div className="flex items-center gap-2 mb-6">
+              <Layers className="w-5 h-5 text-[#e50914]" />
+              <h3 className="text-lg font-bold text-white font-display uppercase tracking-wide">
+                Seasons &amp; Episodes
+              </h3>
             </div>
-          )}
 
-          {/* Episodes Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {currentSeason?.episodes && currentSeason.episodes.length > 0 ? (
-              currentSeason.episodes.map((ep) => {
-                const epNum = ep.episodeNumber ?? ep.episodeNum ?? 1;
-                const isCurrent = activeEpisode?.id === ep.id;
-                return (
-                  <div
-                    key={ep.id}
-                    className={`p-4 rounded-xl border transition-all flex flex-col justify-between group ${
-                      isCurrent
-                        ? "bg-[#e50914]/10 border-[#e50914]/50"
-                        : "bg-white/[0.02] border-white/5 hover:border-white/20 hover:bg-white/[0.04]"
-                    }`}
-                  >
-                    <div className="mb-3">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-black uppercase text-[#e50914]">
-                          Episode {epNum}
-                        </span>
-                        {ep.duration && (
-                          <span className="text-[11px] text-slate-400 flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {ep.duration}m
+            {/* Season Tabs */}
+            {series.seasons && series.seasons.length > 0 && (
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-4 border-b border-white/5 mb-6">
+                {series.seasons.map((s) => {
+                  const sNum = s.seasonNumber ?? s.seasonNum ?? 1;
+                  return (
+                    <button
+                      key={s.id}
+                      onClick={() => {
+                        setActiveSeasonNum(sNum);
+                        if (s.episodes && s.episodes.length > 0) {
+                          setActiveEpisode(s.episodes[0]);
+                        }
+                      }}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex-shrink-0 cursor-pointer ${
+                        activeSeasonNum === sNum
+                          ? "bg-[#e50914] text-white shadow-lg shadow-red-600/30"
+                          : "bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      Season {sNum}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Episodes Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {currentSeason?.episodes && currentSeason.episodes.length > 0 ? (
+                currentSeason.episodes.map((ep) => {
+                  const epNum = ep.episodeNumber ?? ep.episodeNum ?? 1;
+                  const isCurrent = activeEpisode?.id === ep.id;
+                  return (
+                    <div
+                      key={ep.id}
+                      className={`p-4 rounded-xl border transition-all flex flex-col justify-between group ${
+                        isCurrent
+                          ? "bg-[#e50914]/10 border-[#e50914]/50"
+                          : "bg-white/[0.02] border-white/5 hover:border-white/20 hover:bg-white/[0.04]"
+                      }`}
+                    >
+                      <div className="mb-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs font-black uppercase text-[#e50914]">
+                            Episode {epNum}
                           </span>
+                          {ep.duration && (
+                            <span className="text-[11px] text-slate-400 flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
+                              {ep.duration}m
+                            </span>
+                          )}
+                        </div>
+                        <h4 className="text-sm font-semibold text-white group-hover:text-[#e50914] transition-colors truncate">
+                          {ep.title || `Episode ${epNum}`}
+                        </h4>
+                        {(ep.description || ep.overview) && (
+                          <p className="text-xs text-slate-400 line-clamp-2 mt-1">
+                            {ep.description || ep.overview}
+                          </p>
                         )}
                       </div>
-                      <h4 className="text-sm font-semibold text-white group-hover:text-[#e50914] transition-colors truncate">
-                        {ep.title || `Episode ${epNum}`}
-                      </h4>
-                      {(ep.description || ep.overview) && (
-                        <p className="text-xs text-slate-400 line-clamp-2 mt-1">
-                          {ep.description || ep.overview}
-                        </p>
-                      )}
-                    </div>
 
-                    <div className="flex items-center gap-2 pt-2 border-t border-white/5">
-                      <Link
-                        href={`/watch/${series.slug}?season=${activeSeasonNum}&episode=${epNum}`}
-                        className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-white/10 hover:bg-[#e50914] text-white transition-all cursor-pointer"
-                      >
-                        <Play className="w-3 h-3 fill-white" />
-                        <span>Watch Online</span>
-                      </Link>
-                      <a
-                        href={`https://02moviedownloader.top/api/download/tv/${cleanTmdbId || series.imdbId || series.id}/${activeSeasonNum}/${epNum}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/5 hover:bg-blue-600 text-slate-300 hover:text-white transition-all cursor-pointer"
-                        title="Download Episode"
-                      >
-                        <Download className="w-3.5 h-3.5" />
-                      </a>
+                      <div className="flex items-center gap-2 pt-2 border-t border-white/5">
+                        <Link
+                          href={`/watch/${series.slug}?season=${activeSeasonNum}&episode=${epNum}`}
+                          className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-white/10 hover:bg-[#e50914] text-white transition-all cursor-pointer"
+                        >
+                          <Play className="w-3 h-3 fill-white" />
+                          <span>Watch Online</span>
+                        </Link>
+                        <a
+                          href={`https://02moviedownloader.top/api/download/tv/${cleanTmdbId || series.imdbId || series.id}/${activeSeasonNum}/${epNum}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 rounded-lg bg-white/5 hover:bg-blue-600 text-slate-300 hover:text-white transition-all cursor-pointer"
+                          title="Download Episode"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p className="text-xs text-slate-400 col-span-full py-4 text-center">
-                Episodes for Season {activeSeasonNum} are being synced.
-              </p>
-            )}
+                  );
+                })
+              ) : (
+                <p className="text-xs text-slate-400 col-span-full py-4 text-center">
+                  Episodes for Season {activeSeasonNum} are being synced.
+                </p>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Episode Download Center */}
-        <div id="downloads">
-          <DownloadCenter
-            title={series.title}
-            tmdbId={series.tmdbId}
-            imdbId={series.imdbId}
-            movieId={series.id}
-            type="SERIES"
-            season={activeSeasonNum}
-            episode={episodeNumber}
-          />
-        </div>
+        {!isUnreleased && (
+          <div id="downloads">
+            <DownloadCenter
+              title={series.title}
+              tmdbId={series.tmdbId}
+              imdbId={series.imdbId}
+              movieId={series.id}
+              type="SERIES"
+              season={activeSeasonNum}
+              episode={episodeNumber}
+            />
+          </div>
+        )}
 
         {/* Comments Section */}
         <CommentSection movieId={series.id} movieTitle={series.title} />

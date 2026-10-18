@@ -1,16 +1,22 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Bookmark } from "lucide-react";
+import { Bookmark, Plus, Check } from "lucide-react";
 import { MovieItem } from "@/lib/types";
 
 interface WatchlistButtonProps {
   movie: MovieItem;
   className?: string;
   showText?: boolean;
+  netflixMobile?: boolean;
 }
 
-export function WatchlistButton({ movie, className = "", showText = false }: WatchlistButtonProps) {
+export function WatchlistButton({
+  movie,
+  className = "",
+  showText = false,
+  netflixMobile = false,
+}: WatchlistButtonProps) {
   const [isSaved, setIsSaved] = useState(false);
   const [animating, setAnimating] = useState(false);
 
@@ -52,6 +58,33 @@ export function WatchlistButton({ movie, className = "", showText = false }: Wat
     }
   };
 
+  if (netflixMobile) {
+    return (
+      <button
+        onClick={toggleWatchlist}
+        type="button"
+        aria-label={isSaved ? "Remove from My List" : "Add to My List"}
+        title={isSaved ? "Remove from My List" : "Add to My List"}
+        className={`flex flex-col items-center gap-1 text-slate-300 hover:text-white transition-colors cursor-pointer select-none ${className}`}
+      >
+        <div
+          className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+            animating ? "scale-125" : "scale-100"
+          } ${
+            isSaved
+              ? "bg-[#e50914] border-[#e50914] text-white shadow-lg shadow-red-600/40"
+              : "border-white/20 bg-black/40 text-white hover:border-white/40"
+          }`}
+        >
+          {isSaved ? <Check className="w-4 h-4 stroke-[2.5]" /> : <Plus className="w-4 h-4 stroke-[2.5]" />}
+        </div>
+        <span className="text-[10px] font-semibold tracking-tight">
+          {isSaved ? "Added" : "My List"}
+        </span>
+      </button>
+    );
+  }
+
   return (
     <button
       onClick={toggleWatchlist}
@@ -79,3 +112,4 @@ export function WatchlistButton({ movie, className = "", showText = false }: Wat
     </button>
   );
 }
+

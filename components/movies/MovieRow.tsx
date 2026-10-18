@@ -65,12 +65,12 @@ export function MovieRow({ title, items, viewAllHref, showRank = false }: MovieR
         {/* Horizontal Slider with Touch Momentum & Snapping */}
         <div
           ref={rowRef}
-          className="flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-2 -mx-4 px-4 sm:mx-0 sm:px-0"
+          className="flex items-center gap-2.5 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-2 -mx-4 px-4 sm:mx-0 sm:px-0"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
           {items.map((movie, idx) => (
-            <div key={movie.id} className="w-[130px] sm:w-[170px] md:w-[195px] flex-shrink-0 snap-start">
-              <MovieCard movie={movie} rank={showRank ? idx + 1 : undefined} />
+            <div key={movie.id} className="w-[125px] sm:w-[165px] md:w-[190px] flex-shrink-0 snap-start">
+              <MovieCard movie={movie} rank={showRank ? idx + 1 : undefined} priority={idx < 4} />
             </div>
           ))}
         </div>
