@@ -30,9 +30,9 @@ export function MovieRow({ title, items, viewAllHref, showRank = false }: MovieR
   if (!items || items.length === 0) return null;
 
   return (
-    <section className="relative py-6 sm:py-8 group/row">
+    <section className="relative py-4 sm:py-6 group/row max-w-7xl mx-auto">
       {/* Row Header */}
-      <div className="flex items-center justify-between mb-4 px-4 sm:px-6 lg:px-8">
+      <div className="flex items-center justify-between mb-3 sm:mb-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
           <div className="w-1.5 h-5 bg-[#e50914] rounded-full"></div>
           <h2 className="text-lg sm:text-xl font-bold tracking-tight text-white font-display uppercase">

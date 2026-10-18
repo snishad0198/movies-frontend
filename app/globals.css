@@ -18,11 +18,14 @@
   --color-border: #232334;
 }
 
+html,
 body {
   background-color: var(--color-background, #08080c);
   color: var(--color-foreground, #f8fafc);
   font-family: var(--font-inter), sans-serif;
   overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
   -webkit-font-smoothing: antialiased;
 }
 

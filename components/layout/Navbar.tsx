@@ -152,21 +152,21 @@ export function Navbar() {
           : "bg-[#08080c]/85 sm:bg-gradient-to-b sm:from-[#08080c]/95 sm:via-[#08080c]/75 sm:to-[#08080c]/20 backdrop-blur-md border-b border-white/5 py-3.5 sm:py-4"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 sm:gap-4">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
+        <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group flex-shrink-0">
           <img
             src="/logo.jpg"
             alt="Movies.snishad"
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover ring-1 ring-white/20 group-hover:ring-[#e50914] shadow-md shadow-black/50 transition-all"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-cover ring-1 ring-white/20 group-hover:ring-[#e50914] shadow-md shadow-black/50 transition-all"
           />
-          <span className="font-display text-2xl sm:text-3xl tracking-wide text-white uppercase group-hover:text-red-500 transition-colors">
+          <span className="font-display text-xl sm:text-2xl lg:text-3xl tracking-wide text-white uppercase group-hover:text-red-500 transition-colors">
             Movies<span className="text-[#e50914]">.snishad</span>
           </span>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 min-w-0">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             const isWatchlist = link.href === "/watchlist";
@@ -174,7 +174,7 @@ export function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className={`relative px-3 py-1.5 rounded-full text-xs lg:text-sm font-medium transition-all flex items-center gap-1.5 ${
+                className={`relative px-2.5 xl:px-3 py-1.5 rounded-full text-xs xl:text-sm font-medium transition-all flex items-center gap-1.5 whitespace-nowrap ${
                   isActive
                     ? "bg-[#e50914] text-white shadow-md shadow-red-600/30"
                     : "text-slate-300 hover:text-white hover:bg-white/5"
@@ -192,8 +192,8 @@ export function Navbar() {
         </nav>
 
         {/* Search Bar & Actions */}
-        <div className="flex items-center gap-3">
-          <div ref={searchContainerRef} className="relative hidden sm:block w-52 lg:w-72">
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+          <div ref={searchContainerRef} className="relative hidden sm:block w-40 md:w-48 lg:w-56 xl:w-72 transition-all">
             <form onSubmit={handleSearchSubmit} className="relative w-full">
               <input
                 ref={searchInputRef}
@@ -320,10 +320,10 @@ export function Navbar() {
             <Search className="w-5 h-5" />
           </Link>
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile/Tablet Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-slate-300 hover:text-white hover:bg-white/5 rounded-lg focus:outline-none"
+            className="lg:hidden p-2 text-slate-300 hover:text-white hover:bg-white/5 rounded-lg focus:outline-none cursor-pointer"
             aria-label="Toggle Navigation"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -331,10 +331,10 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile & Tablet Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#0c0c14] border-b border-white/10 px-4 py-4 mt-2 space-y-3 shadow-2xl">
-          <form onSubmit={handleSearchSubmit} className="relative w-full mb-3">
+        <div className="lg:hidden bg-[#0c0c14] border-b border-white/10 px-4 py-4 mt-2 space-y-3 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
+          <form onSubmit={handleSearchSubmit} className="relative w-full mb-3 sm:hidden">
             <input
               type="text"
               value={searchQuery}

@@ -118,10 +118,24 @@ export function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-3 tracking-wide uppercase text-[11px] text-slate-300 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              Disclaimer &amp; DMCA
+              Legal &amp; Policies
             </h4>
+            <ul className="space-y-1.5 mb-3 text-xs">
+              <li>
+                <Link href="/privacy" className="text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">
+                  <span className="w-1 h-1 rounded-full bg-[#e50914]" />
+                  <span>Privacy Policy</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-slate-300 hover:text-white transition-colors flex items-center gap-1.5">
+                  <span className="w-1 h-1 rounded-full bg-[#e50914]" />
+                  <span>Terms of Service</span>
+                </Link>
+              </li>
+            </ul>
             <p className="text-slate-500 leading-relaxed text-[11px]">
-              Movies.snishad does not host any media files on its servers. All videos and stream embeds are hosted on third-party public internet services. We respect intellectual property and respond promptly to DMCA notices.
+              Movies.snishad does not host any media files on its servers. All streams are hosted on third-party services. We respect intellectual property and comply with DMCA.
             </p>
           </div>
         </div>
@@ -180,22 +194,32 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-slate-500 text-[11px] flex items-center gap-1.5">
-            <span>&copy; {new Date().getFullYear()} Movies.snishad. Built with</span>
-            <Heart className="w-3 h-3 text-rose-500 fill-rose-500 inline" />
-            <span>by</span>
-            <a
-              href="https://instagram.com/snishad.me_"
-              target="_blank"
-              rel="noreferrer"
-              className="text-slate-400 hover:text-rose-400 font-medium underline transition-colors"
-            >
-              SNishad
-            </a>
-          </p>
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-[11px] text-slate-400">
+            <p className="flex items-center gap-1.5">
+              <span>&copy; {new Date().getFullYear()} Movies.snishad. Built with</span>
+              <Heart className="w-3 h-3 text-rose-500 fill-rose-500 inline" />
+              <span>by</span>
+              <a
+                href="https://instagram.com/snishad.me_"
+                target="_blank"
+                rel="noreferrer"
+                className="text-slate-300 hover:text-rose-400 font-medium underline transition-colors"
+              >
+                SNishad
+              </a>
+            </p>
+            <span className="hidden sm:inline text-slate-600">&bull;</span>
+            <Link href="/privacy" className="hover:text-white transition-colors">
+              Privacy
+            </Link>
+            <span className="text-slate-600">&bull;</span>
+            <Link href="/terms" className="hover:text-white transition-colors">
+              Terms
+            </Link>
+          </div>
           <button
             onClick={scrollToTop}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all text-[11px]"
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all text-[11px] cursor-pointer"
           >
             Back to top
             <ArrowUp className="w-3 h-3" />

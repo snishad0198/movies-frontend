@@ -30,7 +30,7 @@ export function BackToTop() {
       type="button"
       aria-label="Scroll back to top"
       title="Back to Top"
-      className="fixed bottom-6 right-6 z-40 p-3 rounded-2xl bg-[#e50914] hover:bg-[#ff1f2d] text-white shadow-xl shadow-red-950/50 border border-white/20 transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md animate-in fade-in zoom-in-75 duration-200"
+      className="hidden md:flex items-center justify-center fixed bottom-6 right-6 z-40 p-3 rounded-2xl bg-[#e50914] hover:bg-[#ff1f2d] text-white shadow-xl shadow-red-950/50 border border-white/20 transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md animate-in fade-in zoom-in-75 duration-200"
     >
       <ArrowUp className="w-5 h-5" />
     </button>

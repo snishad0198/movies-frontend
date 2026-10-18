@@ -12,6 +12,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/anime",
     "/new",
     "/search",
+    "/privacy",
+    "/terms",
   ];
 
   return routes.map((route) => ({
