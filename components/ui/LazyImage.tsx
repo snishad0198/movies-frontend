@@ -18,6 +18,35 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
  * - Zero-flicker cached image detection
  * - Smooth opacity fade-in
  */
+// Global Singleton IntersectionObserver for maximum performance during resize & scrolling
+let globalObserver: IntersectionObserver | null = null;
+const observerCallbacks = new Map<Element, () => void>();
+
+function getGlobalObserver() {
+  if (typeof window === "undefined" || !("IntersectionObserver" in window)) return null;
+  if (!globalObserver) {
+    globalObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const cb = observerCallbacks.get(entry.target);
+            if (cb) {
+              cb();
+              observerCallbacks.delete(entry.target);
+              globalObserver?.unobserve(entry.target);
+            }
+          }
+        }
+      },
+      {
+        rootMargin: "300px 150px",
+        threshold: 0.01,
+      }
+    );
+  }
+  return globalObserver;
+}
+
 export function LazyImage({
   src,
   alt,
@@ -36,34 +65,23 @@ export function LazyImage({
 
   const validSrc = typeof src === "string" && src.trim().length > 0 && !hasError ? src : null;
 
-  // Real IntersectionObserver with horizontal & vertical awareness
+  // Single shared IntersectionObserver registration
   useEffect(() => {
     if (priority || isInView) return;
 
-    if (typeof window !== "undefined" && "IntersectionObserver" in window) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          const entry = entries[0];
-          if (entry.isIntersecting) {
-            setIsInView(true);
-            observer.disconnect();
-          }
-        },
-        {
-          // 250px vertical margin, 150px horizontal margin
-          // Loads right before entering viewport, stops far-away cards from hogging bandwidth!
-          rootMargin: "250px 150px",
-          threshold: 0.01,
-        }
-      );
+    const el = containerRef.current;
+    if (!el) return;
 
-      if (containerRef.current) {
-        observer.observe(containerRef.current);
-      }
+    const obs = getGlobalObserver();
+    if (obs) {
+      observerCallbacks.set(el, () => setIsInView(true));
+      obs.observe(el);
 
-      return () => observer.disconnect();
+      return () => {
+        observerCallbacks.delete(el);
+        obs.unobserve(el);
+      };
     } else {
-      // Fallback: load immediately if no IntersectionObserver
       setIsInView(true);
     }
   }, [priority, isInView]);

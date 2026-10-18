@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  Home,
   Search,
   Film,
   Tv,
@@ -76,10 +77,17 @@ export function Navbar() {
   }, [searchQuery]);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 25);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     // Update watchlist badge count
     const updateCount = () => {
@@ -135,65 +143,63 @@ export function Navbar() {
   };
 
   const navLinks = [
-    { name: "Home", href: "/" },
+    { name: "Home", href: "/", icon: Home },
     { name: "Movies", href: "/movies", icon: Film },
     { name: "Web Series", href: "/series", icon: Tv },
-    { name: "Anime", href: "/anime", icon: Sparkles },
     { name: "Trending", href: "/trending", icon: Flame },
-    { name: "New Releases", href: "/new", icon: Compass },
-    { name: "Watchlist", href: "/watchlist", icon: Bookmark },
+    { name: "New & Hot", href: "/new", icon: Compass },
+    { name: "Anime", href: "/anime", icon: Sparkles },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-200 ${
         isScrolled
-          ? "bg-[#08080c]/95 backdrop-blur-xl border-b border-white/10 py-3 shadow-2xl"
-          : "bg-[#08080c]/85 sm:bg-gradient-to-b sm:from-[#08080c]/95 sm:via-[#08080c]/75 sm:to-[#08080c]/20 backdrop-blur-md border-b border-white/5 py-3.5 sm:py-4"
+          ? "bg-[#08080c]/95 backdrop-blur-md border-b border-white/10 py-3 shadow-xl"
+          : "bg-gradient-to-b from-[#08080c]/90 via-[#08080c]/50 to-transparent py-3.5 sm:py-4"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 sm:gap-4">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group flex-shrink-0">
-          <img
-            src="/logo.jpg"
-            alt="Movies.snishad"
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-cover ring-1 ring-white/20 group-hover:ring-[#e50914] shadow-md shadow-black/50 transition-all"
-          />
-          <span className="font-display text-xl sm:text-2xl lg:text-3xl tracking-wide text-white uppercase group-hover:text-red-500 transition-colors">
-            Movies<span className="text-[#e50914]">.snishad</span>
-          </span>
-        </Link>
+        {/* Left: Brand Logo & Clean Desktop Navigation */}
+        <div className="flex items-center gap-3 sm:gap-6 min-w-0">
+          <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group flex-shrink-0">
+            <img
+              src="/logo.jpg"
+              alt="Movies.snishad"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-cover ring-1 ring-white/20 group-hover:ring-[#e50914] shadow-md shadow-black/50 transition-all"
+            />
+            <span className="font-display text-xl sm:text-2xl tracking-wide text-white uppercase group-hover:text-red-500 transition-colors">
+              Movies<span className="text-[#e50914]">.snishad</span>
+            </span>
+          </Link>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 min-w-0">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href;
-            const isWatchlist = link.href === "/watchlist";
-            return (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`relative px-2.5 xl:px-3 py-1.5 rounded-full text-xs xl:text-sm font-medium transition-all flex items-center gap-1.5 whitespace-nowrap ${
-                  isActive
-                    ? "bg-[#e50914] text-white shadow-md shadow-red-600/30"
-                    : "text-slate-300 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                <span>{link.name}</span>
-                {isWatchlist && watchlistCount > 0 && (
-                  <span className="bg-[#e50914] text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full ring-1 ring-black/40 animate-pulse">
-                    {watchlistCount}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
+          {/* Desktop Navigation Links (Clean Authentic Netflix Typography) */}
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 ml-2 lg:ml-4 min-w-0">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`relative py-1 text-xs xl:text-sm transition-colors whitespace-nowrap cursor-pointer ${
+                    isActive
+                      ? "text-white font-bold tracking-tight"
+                      : "text-slate-300 hover:text-white font-medium"
+                  }`}
+                >
+                  <span>{link.name}</span>
+                  {isActive && (
+                    <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#e50914] rounded-full shadow-sm shadow-red-500/50" />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
 
-        {/* Search Bar & Actions */}
+        {/* Right: Search Bar, Watchlist & Actions */}
         <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-          <div ref={searchContainerRef} className="relative hidden sm:block w-40 md:w-48 lg:w-56 xl:w-72 transition-all">
+          <div ref={searchContainerRef} className="relative hidden sm:block w-44 md:w-52 lg:w-64 xl:w-72">
             <form onSubmit={handleSearchSubmit} className="relative w-full">
               <input
                 ref={searchInputRef}
@@ -204,30 +210,27 @@ export function Navbar() {
                 }}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search movies, series..."
-                className="w-full bg-[#161622]/90 border border-white/10 rounded-full py-1.5 pl-9 pr-14 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#e50914] focus:ring-1 focus:ring-[#e50914] transition-all"
+                className="w-full bg-[#14141e]/80 hover:bg-[#181826] focus:bg-[#12121c] border border-white/10 focus:border-[#e50914] rounded-full py-1.5 pl-9 pr-9 text-xs text-white placeholder-slate-400 focus:outline-none transition-colors"
               />
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              
-              <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                {isSearching && (
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+
+              {searchQuery && !isSearching && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setShowDropdown(false);
+                  }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+              {isSearching && (
+                <div className="absolute right-2.5 top-1/2 -translate-y-1/2">
                   <Loader2 className="w-3.5 h-3.5 text-[#e50914] animate-spin" />
-                )}
-                {searchQuery && !isSearching && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery("");
-                      setShowDropdown(false);
-                    }}
-                    className="text-slate-400 hover:text-white"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                )}
-                <kbd className="text-[9px] font-mono text-slate-500 bg-white/5 border border-white/10 px-1.5 py-0.5 rounded pointer-events-none hidden lg:inline-block">
-                  /
-                </kbd>
-              </div>
+                </div>
+              )}
             </form>
 
             {/* Live Autocomplete Dropdown */}
@@ -311,6 +314,20 @@ export function Navbar() {
               </div>
             )}
           </div>
+
+          {/* Desktop Watchlist Icon Button with Badge */}
+          <Link
+            href="/watchlist"
+            title="My Watchlist"
+            className="hidden sm:inline-flex relative p-2 text-slate-300 hover:text-white hover:bg-white/5 rounded-full transition-colors cursor-pointer select-none"
+          >
+            <Bookmark className="w-5 h-5 stroke-[1.8]" />
+            {watchlistCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 bg-[#e50914] text-white text-[9px] font-black min-w-[16px] h-[16px] flex items-center justify-center rounded-full px-1 shadow-md shadow-red-600/40 animate-pulse">
+                {watchlistCount > 99 ? "99+" : watchlistCount}
+              </span>
+            )}
+          </Link>
 
           {/* Mobile search button */}
           <Link
